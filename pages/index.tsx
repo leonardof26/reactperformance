@@ -1,3 +1,37 @@
+import React, { FormEvent, useState } from 'react'
+import SearchResults from '../components/SearchResults'
+
 export default function Home() {
-  return <h1>Hello World</h1>
+  const [searchInput, setSearchInput] = useState('')
+  const [results, setResults] = useState([])
+
+  async function handleSearch(event: FormEvent) {
+    event.preventDefault()
+
+    if (!searchInput.trim()) {
+      return
+    }
+
+    const resp = await fetch(`http://localhost:3333/products?q=${searchInput}`)
+    const data = await resp.json()
+
+    setResults(data)
+  }
+
+  return (
+    <div>
+      <h1>Search</h1>
+
+      <form onSubmit={handleSearch}>
+        <input
+          type='text'
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <button type='submit'>Procurar</button>
+      </form>
+
+      <SearchResults products={results} />
+    </div>
+  )
 }

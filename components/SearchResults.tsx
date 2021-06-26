@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { ProductItem } from './ProductItem'
 
@@ -14,11 +14,25 @@ interface SearchResultsProps {
 }
 
 function SearchResults({ products, totalPrice }: SearchResultsProps) {
+  const [wishList, setWishList] = useState<number[]>([])
+
+  function addToWishList(id: number) {
+    setWishList([...wishList, id])
+  }
+
+  useEffect(() => {
+    console.log(wishList)
+  }, [wishList])
+
   return (
     <div>
       <h2>Total: {totalPrice}</h2>
       {products.map((product) => (
-        <ProductItem product={product} key={product.id} />
+        <ProductItem
+          product={product}
+          key={product.id}
+          onAddToWishList={addToWishList}
+        />
       ))}
     </div>
   )

@@ -26,7 +26,7 @@ export default function Home() {
     const resp = await fetch(`http://localhost:3333/products?q=${searchInput}`)
     const data = await resp.json()
 
-    const totalPrice = data.reduce((acc, product) => {
+    const totalPrice = data.reduce((acc: any, product: any) => {
       return acc + product.price
     }, 0)
 
@@ -46,7 +46,10 @@ export default function Home() {
         <button type='submit'>Procurar</button>
       </form>
 
-      <SearchResults products={results.data || []} />
+      <SearchResults
+        products={results.data || []}
+        totalPrice={results.totalPrice}
+      />
     </div>
   )
 }

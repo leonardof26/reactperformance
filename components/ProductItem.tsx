@@ -1,6 +1,7 @@
 import { memo, useState } from 'react'
 import { AddProductToWishListProps } from './AddProductToWishList'
 import dynamic from 'next/dynamic'
+import lodash from 'lodash'
 
 // import { AddProductToWishList } from './AddProductToWishList'
 
@@ -11,6 +12,7 @@ const AddProductToWishList = dynamic<AddProductToWishListProps>(
     )
   },
   {
+    // eslint-disable-next-line react/display-name
     loading: () => <span>Carregando</span>,
   }
 )
@@ -51,6 +53,6 @@ function ProductItemComponent({ product, onAddToWishList }: ProductItemProps) {
 export const ProductItem = memo(
   ProductItemComponent,
   (prevProps, nextProps) => {
-    return Object.is(prevProps.product, nextProps.product)
+    return lodash.isEqual(prevProps.product, nextProps.product)
   }
 )

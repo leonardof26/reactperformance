@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { List, ListRowRenderer } from 'react-virtualized'
+
 import { ProductItem } from './ProductItem'
 
 type Product = {
@@ -16,6 +18,17 @@ interface SearchResultsProps {
 function SearchResults({ products, totalPrice }: SearchResultsProps) {
   const [wishList, setWishList] = useState<number[]>([])
 
+  const rowRenderer: ListRowRenderer = ({ index, key, style }) => {
+    return (
+      <div key={key} style={style}>
+        <ProductItem
+          product={products[index]}
+          onAddToWishList={addToWishList}
+        />
+      </div>
+    )
+  }
+
   function addToWishList(id: number) {
     setWishList([...wishList, id])
   }
@@ -27,13 +40,14 @@ function SearchResults({ products, totalPrice }: SearchResultsProps) {
   return (
     <div>
       <h2>Total: {totalPrice}</h2>
-      {products.map((product) => (
-        <ProductItem
-          product={product}
-          key={product.id}
-          onAddToWishList={addToWishList}
-        />
-      ))}
+      <List
+        height={300}
+        rowHeight={25}
+        width={900}
+        overscanRowCount={5}
+        rowCount={products.length}
+        rowRenderer={rowRenderer}
+      />
     </div>
   )
 }
